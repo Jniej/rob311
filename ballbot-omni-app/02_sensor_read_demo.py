@@ -207,8 +207,6 @@ if __name__ == "__main__":
 
     commands['start'] = 1.0
 
-    dpsi = np.zeros((3, 1))
-
     # Time for comms to sync
     time.sleep(1.0)
 
@@ -230,21 +228,34 @@ if __name__ == "__main__":
         i = i + 1
         t_now = time.time() - t_start
 
-        dpsi[0] = states['dpsi_1']
-        dpsi[1] = states['dpsi_2']
-        dpsi[2] = states['dpsi_3']
-
         ser_dev.send_topic_data(101, commands)
 
         # Define variables for saving / analysis here - below you can create variables from the available states
-        theta_x = (states['theta_roll'])  
-        theta_y = (states['theta_pitch'])
+        # Ball-Bot Orientation
+        theta_x = states['theta_roll']
+        theta_y = states['theta_pitch']
+        # Wheel Velocities
+        dpsi_1 = states['dpsi_1']
+        dpsi_2 = states['dpsi_2']
+        dpsi_3 = states['dpsi_3']
+        
+        #########################
+        # YOUR CODE GOES HERE
+        # Wheel Rotations
+        ps1_1 = states['psi_1']
+        ps1_2 = states['psi_2']
+        ps1_3 = states['psi_3']
 
-        # Construct the data matrix for saving - you can add more variables by replicating the format below
-        data = [i] + [t_now] + [theta_x] + [theta_y]
+        #########################
+
+        # Construct the data matrix for saving - Add wheel speed and rotations by replicating the format below
+        #########################
+        # MODIFY THE LINE BELOW
+        data = [i, t_now, theta_x, theta_y, dpsi_1, dpsi_2, dpsi_3, ps1_1, ps1_2, ps1_3]
+        #########################
+        
         dl.appendData(data)
 
-    
     print("Saving data...")
     dl.writeOut()
     print("Resetting Motor Commands.")
